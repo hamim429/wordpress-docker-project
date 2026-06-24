@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # Layanan Database (MariaDB)
+  db:
+    image: mariadb:latest
+    container_name: wordpress_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppassword123
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - backend-net
+
+  # Layanan Aplikasi WordPress
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppassword123
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - backend-net
+      - frontend-net
+    ports:
+      - "8080:80"
+
+# Definisikan Custom Network (Network Isolation)
+networks:
+  # Network untuk komunikasi internal antara DB dan WordPress (tidak bisa diakses dari luar)
+  backend-net:
+    driver: bridge
+    internal: true   # Mengunci network ini agar private
+  # Network untuk menerima trafik dari pengguna (browser)
+  frontend-net:
+    driver: bridge
+
+# Definisikan Volume (Agar Data Tetap Tersimpan)
+volumes:
+  db_data:
+  wp_data:
