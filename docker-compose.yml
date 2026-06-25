@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Layanan Database (MariaDB)
+
   db:
     image: mariadb:latest
     container_name: wordpress_db
@@ -16,7 +16,6 @@ services:
     networks:
       - backend-net
 
-  # Layanan Aplikasi WordPress
   wordpress:
     image: wordpress:latest
     container_name: wordpress_app
@@ -36,17 +35,15 @@ services:
     ports:
       - "8080:80"
 
-# Definisikan Custom Network (Network Isolation)
 networks:
-  # Network untuk komunikasi internal antara DB dan WordPress (tidak bisa diakses dari luar)
+
   backend-net:
     driver: bridge
-    internal: true   # Mengunci network ini agar private
-  # Network untuk menerima trafik dari pengguna (browser)
+    internal: true  
+    
   frontend-net:
     driver: bridge
 
-# Definisikan Volume (Agar Data Tetap Tersimpan)
 volumes:
   db_data:
   wp_data:
