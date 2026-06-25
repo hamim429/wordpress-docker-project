@@ -1,4 +1,5 @@
 ﻿ #Proyek WordPress dengan Docker. 
+
 Proyek ini mengimplementasikan WordPress menggunakan Docker Compose dengan:
 - Container MariaDB untuk database
 - Container WordPress untuk aplikasi
